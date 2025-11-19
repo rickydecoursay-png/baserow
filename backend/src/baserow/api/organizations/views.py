@@ -1,4 +1,5 @@
 from django.db import transaction
+from drf_spectacular.openapi import OpenApiParameter
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -6,7 +7,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from baserow.api.decorators import map_exceptions, validate_body
-from baserow.api.errors import ERROR_USER_NOT_IN_GROUP
 from baserow.api.schemas import get_error_schema
 from baserow.core.exceptions import (
     CannotDeleteYourselfFromOrganization,
@@ -81,9 +81,9 @@ class OrganizationView(APIView):
 
     @extend_schema(
         parameters=[
-            extend_schema.OpenApiParameter(
+            OpenApiParameter(
                 name="organization_id",
-                location=extend_schema.OpenApiParameter.PATH,
+                location=OpenApiParameter.PATH,
                 type=int,
                 description="The ID of the organization.",
             )
@@ -110,9 +110,9 @@ class OrganizationView(APIView):
 
     @extend_schema(
         parameters=[
-            extend_schema.OpenApiParameter(
+            OpenApiParameter(
                 name="organization_id",
-                location=extend_schema.OpenApiParameter.PATH,
+                location=OpenApiParameter.PATH,
                 type=int,
                 description="The ID of the organization.",
             )
@@ -147,9 +147,9 @@ class OrganizationView(APIView):
 
     @extend_schema(
         parameters=[
-            extend_schema.OpenApiParameter(
+            OpenApiParameter(
                 name="organization_id",
-                location=extend_schema.OpenApiParameter.PATH,
+                location=OpenApiParameter.PATH,
                 type=int,
                 description="The ID of the organization.",
             )
@@ -183,9 +183,9 @@ class OrganizationUsersView(APIView):
 
     @extend_schema(
         parameters=[
-            extend_schema.OpenApiParameter(
+            OpenApiParameter(
                 name="organization_id",
-                location=extend_schema.OpenApiParameter.PATH,
+                location=OpenApiParameter.PATH,
                 type=int,
                 description="The ID of the organization.",
             )
@@ -221,15 +221,15 @@ class OrganizationUserView(APIView):
 
     @extend_schema(
         parameters=[
-            extend_schema.OpenApiParameter(
+            OpenApiParameter(
                 name="organization_id",
-                location=extend_schema.OpenApiParameter.PATH,
+                location=OpenApiParameter.PATH,
                 type=int,
                 description="The ID of the organization.",
             ),
-            extend_schema.OpenApiParameter(
+            OpenApiParameter(
                 name="organization_user_id",
-                location=extend_schema.OpenApiParameter.PATH,
+                location=OpenApiParameter.PATH,
                 type=int,
                 description="The ID of the organization user.",
             ),
@@ -273,15 +273,15 @@ class OrganizationUserView(APIView):
 
     @extend_schema(
         parameters=[
-            extend_schema.OpenApiParameter(
+            OpenApiParameter(
                 name="organization_id",
-                location=extend_schema.OpenApiParameter.PATH,
+                location=OpenApiParameter.PATH,
                 type=int,
                 description="The ID of the organization.",
             ),
-            extend_schema.OpenApiParameter(
+            OpenApiParameter(
                 name="organization_user_id",
-                location=extend_schema.OpenApiParameter.PATH,
+                location=OpenApiParameter.PATH,
                 type=int,
                 description="The ID of the organization user.",
             ),
