@@ -17,6 +17,7 @@ from .integrations import urls as integrations_urls
 from .jobs import urls as jobs_urls
 from .mcp import urls as mcp_urls
 from .notifications import urls as notifications_urls
+from .organizations import urls as organizations_urls
 from .search import urls as search_urls
 from .settings import urls as settings_urls
 from .snapshots import urls as snapshots_urls
@@ -45,6 +46,7 @@ urlpatterns = (
         path("two-factor-auth/", include(two_factor_urls, namespace="two_factor_auth")),
         path("user/", include(user_urls, namespace="user")),
         path("user-files/", include(user_files_urls, namespace="user_files")),
+        path("organizations/", include(organizations_urls, namespace="organizations")),
         path("workspaces/", include(workspace_urls, namespace="workspaces")),
         path("templates/", include(templates_urls, namespace="templates")),
         path("applications/", include(application_urls, namespace="applications")),
