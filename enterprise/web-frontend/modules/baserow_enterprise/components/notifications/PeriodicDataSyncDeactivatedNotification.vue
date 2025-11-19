@@ -1,4 +1,4 @@
-<template>
+Kwe<template>
   <nuxt-link
     class="notification-panel__notification-link"
     :to="isLicenseUnavailable ? '' : route"
