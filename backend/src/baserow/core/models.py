@@ -35,6 +35,8 @@ from .services.models import Service
 
 __all__ = [
     "Settings",
+    "Organization",
+    "OrganizationUser",
     "Workspace",
     "WorkspaceUser",
     "WorkspaceInvitation",
@@ -258,6 +260,73 @@ class UserProfile(models.Model):
 class BlacklistedToken(CreatedAndUpdatedOnMixin, models.Model):
     hashed_token = models.CharField(max_length=64, db_index=True, unique=True)
     expires_at = models.DateTimeField()
+
+
+# Organization permission constants
+ORGANIZATION_USER_PERMISSION_ADMIN = "ADMIN"
+ORGANIZATION_USER_PERMISSION_MEMBER = "MEMBER"
+
+
+class Organization(HierarchicalModelMixin, TrashableModelMixin, CreatedAndUpdatedOnMixin):
+    """
+    An organization is a top-level container that can contain multiple workspaces.
+    Organizations allow for better multi-tenant management and hierarchical structure.
+    """
+
+    name = models.CharField(max_length=165)
+    users = models.ManyToManyField(User, through="OrganizationUser")
+
+    def get_parent(self):
+        return None
+
+    def __str__(self):
+        return f"<Organization id={self.id}, name={self.name}>"
+
+    def __repr__(self):
+        return f"<Organization id={self.id}, name={self.name}>"
+
+
+class OrganizationUser(
+    HierarchicalModelMixin,
+    TrashableModelMixin,
+    CreatedAndUpdatedOnMixin,
+    OrderableMixin,
+    models.Model,
+):
+    """
+    Represents a user's membership in an organization with specific permissions.
+    """
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        help_text="The user that has access to the organization.",
+    )
+    organization = models.ForeignKey(
+        Organization,
+        on_delete=models.CASCADE,
+        help_text="The organization that the user has access to.",
+    )
+    order = models.PositiveIntegerField(
+        help_text="Unique order that the organization has for the user."
+    )
+    permissions = models.CharField(
+        default=ORGANIZATION_USER_PERMISSION_MEMBER,
+        max_length=32,
+        help_text="The permissions that the user has within the organization.",
+    )
+
+    def get_parent(self):
+        return self.organization
+
+    class Meta:
+        unique_together = [["user", "organization"]]
+        ordering = ("order",)
+
+    @classmethod
+    def get_last_order(cls, user):
+        queryset = cls.objects.filter(user=user)
+        return cls.get_highest_order_of_queryset(queryset) + 1
 
 
 class Workspace(HierarchicalModelMixin, TrashableModelMixin, CreatedAndUpdatedOnMixin):

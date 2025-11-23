@@ -276,6 +276,48 @@ class LastAdminOfWorkspace(Exception):
     """
 
 
+class OrganizationDoesNotExist(Exception):
+    """Raised when trying to get an organization that does not exist."""
+
+
+class OrganizationUserDoesNotExist(Exception):
+    """Raised when trying to get an organization user that does not exist."""
+
+
+class OrganizationUserAlreadyExists(Exception):
+    """
+    Raised when trying to create an organization user that already exists.
+    """
+
+
+class UserNotInOrganization(PermissionException):
+    """Raised when the user doesn't have access to the related organization."""
+
+    def __init__(self, user=None, organization=None, *args, **kwargs):
+        if user and organization:
+            super().__init__(
+                f"User {user} doesn't belong to organization {organization}.",
+                *args,
+                **kwargs,
+            )
+        else:
+            super().__init__(
+                "The user doesn't belong to the organization", *args, **kwargs
+            )
+
+
+class LastAdminOfOrganization(Exception):
+    """
+    Raised when somebody tries to remove the last admin of an organization.
+    """
+
+
+class CannotDeleteYourselfFromOrganization(Exception):
+    """
+    Raised when the user tries to delete himself from the organization.
+    """
+
+
 class IdDoesNotExist(Exception):
     """
     Raised when an ID is queried that does not exist
